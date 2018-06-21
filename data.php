@@ -1,3 +1,30 @@
+<?php
+require 'helpers.php';
+require 'class/validator.class.php';
+
+$variablesDesicion = $_GET['variablesDesicion'] ?? null;
+$restricciones     = $_GET['restricciones'] ?? null;
+
+validator( (int)$variablesDesicion, (int)$restricciones );
+
+
+function validator( $a, $b )
+{
+	if ( ! Validator::integer( $a ) ) 
+		die( 'Error: no hay variables de desición.' );
+
+	if ( ! Validator::max( $a, 0 ) ) 
+		die( 'Error: las variables de desición deben ser mayores a 0.' );
+
+	if ( ! Validator::integer( $b ) ) 
+		die( 'Error: no hay restricciones.' );
+
+	if ( ! Validator::max( $b, 0 ) ) 
+		die( 'Error: las restricciones de desición deben ser mayores a 0.' );
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,25 +50,32 @@
 								<option value="max" selected>Maximizar</option>
 								<option value="min" >Minimizar</option>
 							</select>
-							<small id="emailHelp" class="form-text text-muted">Objetivo de la función</small>
+							<small class="form-text text-muted">Objetivo de la función</small>
 						</div>
 
 						z = 
 
-						<div class="form-group col">
-							<div class="input-group input-group-sm mb-3">
-								<input type="text" class="form-control" name="variables[]" required>
+						<?php for ( $i = 0; $i < $variablesDesicion; $i ++ ): ?>
+							<div class="form-group col">
+								<div class="input-group input-group-sm mb-3">
+									<input type="text" class="form-control" name="variables[]" required>
 
-								<div class="input-group-append">
-									<span class="input-group-text" id="basic-addon2">
-										x
-										<sub>
-											0
-										</sub>
-									</span>
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">
+											x
+											<sub>
+												<?php echo $i ?>
+											</sub>
+										</span>
+									</div>
 								</div>
 							</div>
-						</div>
+
+							<?php if ( $i + 1 < $variablesDesicion ): ?>
+								<?php echo ' + ' ?>
+							<?php endif ?>
+
+						<?php endfor ?>
 					</div>
 
 					<h4 class="text-muted mb-3">
@@ -50,31 +84,41 @@
 						</small>
 					</h4>
 
-					<div class="form-row">
-						<div class="input-group mb-3 col">
-							<input type="text" class="form-control" name="r[]" required>
-							<div class="input-group-append">
-								<span class="input-group-text" id="basic-addon2">
-									x
-									<sub>
-										0
-									</sub>
-								</span>
+					<?php for ( $i = 0; $i < $restricciones; $i ++ ): ?>
+						<div class="form-row">
+
+							<?php for ( $j = 0; $j < $variablesDesicion; $j ++ ): ?>
+								<div class="input-group mb-3 col">
+									<input type="text" class="form-control" name="restricciones[]" required>
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">
+											x
+											<sub>
+												<?php echo $j ?>
+											</sub>
+										</span>
+									</div>
+								</div>
+
+								<?php if ( $j + 1 < $variablesDesicion ): ?>
+									<?php echo ' + ' ?>
+								<?php endif ?>
+
+							<?php endfor ?>
+
+							<div class="form-group col-1">
+								<select id="desigualdades" name="desigualdades[]" class="form-control form-control-sm text-center" tabindex="-1">
+									<option name="<" selected>≤</option>
+									<option name=">">≥</option>
+									<option name="=">=</option>
+								</select>
+							</div>
+
+							<div class="form-group mb-3 col">
+								<input type="text" class="form-control" name="restricciones[]">
 							</div>
 						</div>
-
-						<div class="form-group col-1">
-							<select id="restricciones" name="restricciones[]" class="form-control form-control-sm text-center" tabindex="-1">
-								<option name="<" selected>≤</option>
-								<option name=">">≥</option>
-								<option name="=">=</option>
-							</select>
-						</div>
-
-						<div class="form-group mb-3 col">
-							<input type="text" class="form-control" name="r[]">
-						</div>
-					</div>
+					<?php endfor ?>
 
 					<button type="submit" class="btn btn-primary btn-block mt-4">
 						Resolver
