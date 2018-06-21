@@ -26,6 +26,39 @@ class Simplex
 
 	public function execute()
 	{
-		
+		$this->despejarz();
+		$this->agregarVariables();
+
+		dd( $this->re );
+
+	}
+
+	protected function agregarVariables()
+	{
+		foreach ( $this->de as $key => $desigualdad ) 
+		{
+			switch ( $desigualdad ) 
+			{
+				case 'mayor':
+					# code...
+					break;
+
+				case 'igual':
+					# code...
+					break;
+				
+				default:
+					$this->re[$key][] = 1;
+					break;
+			}
+		}
+	}
+
+	protected function despejarz()
+	{
+		foreach ( $this->z as $key => $value ) 
+		{
+			$this->z[$key] = $value - ( $value * 2 );
+		}
 	}
 }
