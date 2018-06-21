@@ -8,6 +8,7 @@ $restricciones     = $_GET['restricciones'] ?? null;
 validator( (int)$variablesDesicion, (int)$restricciones );
 
 
+//Validar datos de entrada
 function validator( $a, $b )
 {
 	if ( ! Validator::integer( $a ) ) 
@@ -22,7 +23,6 @@ function validator( $a, $b )
 	if ( ! Validator::max( $b, 0 ) ) 
 		die( 'Error: las restricciones de desición deben ser mayores a 0.' );
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -108,9 +108,9 @@ function validator( $a, $b )
 
 							<div class="form-group col-1">
 								<select id="desigualdades" name="desigualdades[]" class="form-control form-control-sm text-center" tabindex="-1">
-									<option name="<" selected>≤</option>
-									<option name=">">≥</option>
-									<option name="=">=</option>
+									<option value="<" selected>≤</option>
+									<option value=">">≥</option>
+									<option value="=">=</option>
 								</select>
 							</div>
 
