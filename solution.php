@@ -9,7 +9,6 @@ $simplex = new Simplex(
 	getZ(), 
 	generateRestricciones(), 
 	getDesigualdades() );
-$simplex->ejecutar();
 
 function getObjetivo()
 {
@@ -43,11 +42,11 @@ function generateRestricciones()
 	{ 
 		for ( $j = 0; $j < $_GET['v']; $j ++ ) 
 		{ 
-			$temp[$i][] = $_GET['r' . $i . '_' . $j];
+			$temp[$i][] = (int)$_GET['r' . $i . '_' . $j];
 		}
 
 		//Agregamos el valor final a la restriccion
-		$temp[$i][] = $_GET['s' . $i];
+		$temp[$i][] = (int)$_GET['s' . $i];
 	}
 	return $temp;
 }
@@ -64,3 +63,27 @@ function getDesigualdades()
 	return $temp;
 }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container mt-3">
+		<div class="row">
+			<div class="col">
+				<?php require'header.php' ?>
+
+				<?php $simplex->execute() ?>
+			</div>
+		</div>
+	</div>
+
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
