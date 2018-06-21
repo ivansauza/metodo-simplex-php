@@ -36,7 +36,9 @@ function validator( $a, $b )
 	<div class="container mt-3">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="solution.php" autocomplete="off">
+				<form method="GET" action="solution.php" autocomplete="on">
+					<input type="hidden" name="v" value="<?php echo $variablesDesicion ?>">
+					<input type="hidden" name="r" value="<?php echo $restricciones ?>">
 
 					<a href="index.php" class="btn btn-outline-danger float-right">
 						Regresar
@@ -47,8 +49,8 @@ function validator( $a, $b )
 					<div class="form-row">
 						<div class="form-group col-2">
 							<select id="objetivo" name="objetivo" class="form-control form-control-sm">
-								<option value="max" selected>Maximizar</option>
-								<option value="min" >Minimizar</option>
+								<option value="maximizar" selected>Maximizar</option>
+								<option value="minimizar" >Minimizar</option>
 							</select>
 							<small class="form-text text-muted">Objetivo de la función</small>
 						</div>
@@ -58,7 +60,7 @@ function validator( $a, $b )
 						<?php for ( $i = 0; $i < $variablesDesicion; $i ++ ): ?>
 							<div class="form-group col">
 								<div class="input-group input-group-sm mb-3">
-									<input type="text" class="form-control" name="variables[]" required>
+									<input type="text" class="form-control" name="x<?php echo $i ?>" required>
 
 									<div class="input-group-append">
 										<span class="input-group-text" id="basic-addon2">
@@ -89,7 +91,7 @@ function validator( $a, $b )
 
 							<?php for ( $j = 0; $j < $variablesDesicion; $j ++ ): ?>
 								<div class="input-group mb-3 col">
-									<input type="text" class="form-control" name="restricciones[]" required>
+									<input type="text" class="form-control" name="r<?php echo $i . '_' . $j ?>" required>
 									<div class="input-group-append">
 										<span class="input-group-text" id="basic-addon2">
 											x
@@ -107,15 +109,15 @@ function validator( $a, $b )
 							<?php endfor ?>
 
 							<div class="form-group col-1">
-								<select id="desigualdades" name="desigualdades[]" class="form-control form-control-sm text-center" tabindex="-1">
-									<option value="<" selected>≤</option>
-									<option value=">">≥</option>
-									<option value="=">=</option>
+								<select id="desigualdades" name="d<?php echo $i ?>" class="form-control form-control-sm text-center" tabindex="-1">
+									<option value="menor" selected>≤</option>
+									<option value="mayor">≥</option>
+									<option value="igual">=</option>
 								</select>
 							</div>
 
 							<div class="form-group mb-3 col">
-								<input type="text" class="form-control" name="restricciones[]">
+								<input type="text" class="form-control" name="s<?php echo $i ?>">
 							</div>
 						</div>
 					<?php endfor ?>
