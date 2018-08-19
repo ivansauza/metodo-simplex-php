@@ -37,20 +37,33 @@ class Simplex
 	{
 		foreach ( $this->de as $key => $desigualdad ) 
 		{
+			//Eliminar el ultimo elemento de la reestriccion
+			$solucion = array_pop( $this->re[$key] );
+
 			switch ( $desigualdad ) 
 			{
 				case 'mayor':
-					# code...
+					//Añadir la variable de holgura mas la variable artificial
+					$this->re[$key]['s' . $key] = -1;
+					$this->re[$key]['a' . $key] = 1;
+
 					break;
 
 				case 'igual':
-					# code...
+					//Añadir la variable artificial
+					$this->re[$key]['a' . $key] = 1;
+
 					break;
 				
 				default:
-					$this->re[$key][] = 1;
+					//Añadir la variable de holgura
+					$this->re[$key]['s' . $key] = 1;
+
 					break;
 			}
+
+			// Añadir el ultimo numero
+			array_push( $this->re[$key], $solucion );
 		}
 	}
 
