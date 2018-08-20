@@ -10,7 +10,7 @@ $reestricciones = getRestricciones();
 $desigualdades  = getDesigualdades();
 $soluciones     = getSoluciones();
 
-$modelo = null;
+$modelo   = null;
 $desicion = true;
 
 //Ejecutar un modelo ya sea metodo normal o dos fases
