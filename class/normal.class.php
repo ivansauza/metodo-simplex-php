@@ -18,7 +18,56 @@ class Normal extends Simplex
 	{
 		$this->despejarZ();
 		$this->agregarVariablesDeHolgura();
+		$this->elejirFilaPivote();
+		$this->elejirColumnaPivote();
+
 		$this->imprimirTabla();
+	}
+
+	private function elejirFilaPivote()
+	{
+		$menorPosicion = 0; // Elejir el primero elemento de z como el menor/mayor
+
+		// Extraer el numero mas menor de z
+		foreach ( $this->z as $key => $value ) 
+		{
+			if ( $value <= $this->z[$menorPosicion] ) 
+			{
+				$menorPosicion = $key;
+			}
+		}
+
+		//Extraer el numero mas menor de las variables de Holgura
+
+		$this->filaPivote = $menorPosicion;
+	}
+
+	private function elejirColumnaPivote()
+	{
+		$menorPosicion = 0;
+
+		// Extraer el array de cada restricción
+		foreach ( $this->restricciones as $i => $restriccion ) 
+		{
+			// Recorrer los elementos de la restricción
+			foreach ( $restriccion as $j => $value ) 
+			{
+				// Comprobar que se esta haciendo en la Fila Pivote
+				if ( $j == $this->filaPivote ) 
+				{
+					//Comprobar si el elemento es menor al menor actual
+					$x = ( $this->soluciones[$i] / $value );
+					$y = ( $this->soluciones[$menorPosicion] / $value );
+
+					if ( $x <= $y ) 
+					{
+						$menorPosicion = $i;
+					}
+				}
+			}
+		}
+
+		$this->columnaPivote = $menorPosicion;
 	}
 
 	private function agregarVariablesDeHolgura()
@@ -59,7 +108,13 @@ class Normal extends Simplex
 					// Imprimir los valores de z
 					foreach ( $this->z as $key => $value ) 
 					{
-						echo '<th scope="row">' . $value . '</th>';	
+						//Colorear la Fila Pivote
+						if ( $key == $this->filaPivote ) 
+						{
+							echo '<th scope="row" class="text-warning">' . $value . '</th>';	
+						} else {
+							echo '<th scope="row">' . $value . '</th>';	
+						}
 					}
 
 					for ( $i = 0; $i < count( $this->variablesHolgura ) + 1; $i ++ ) 
@@ -74,10 +129,18 @@ class Normal extends Simplex
 				{ 
 					echo '<tr>';
 						echo '<th scope="row">s' . $i . '</th>';
+						
 						// Imprimir los valores de cada restriccion
 						for ( $j = 0; $j < count( $this->restricciones[$i] ); $j ++ ) 
 						{ 
-							echo '<th scope="row">' . $this->restricciones[$i][$j] . '</th>';
+							// Colorear la Columna Pivote
+
+							if ( $i == $this->columnaPivote AND $j == $this->filaPivote ) 
+							{
+								echo '<th scope="row" class="text-success">' . $this->restricciones[$i][$j] . '</th>';
+							} else {
+								echo '<th scope="row">' . $this->restricciones[$i][$j] . '</th>';
+							}
 						}
 
 						// Imprimir las variables de holgura de cada restricción
