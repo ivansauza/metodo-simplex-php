@@ -4,64 +4,28 @@ require 'class/simplex.class.php';
 
 session_start();
 
-$simplex = new Simplex( 
-	getObjetivo(), 
-	getZ(), 
-	generateRestricciones(), 
-	getDesigualdades() );
+$z 				= getZ();
+$objetivo       = getObjetivo();
+$reestricciones = getRestricciones();
+$desigualdades  = getDesigualdades();
+$soluciones     = getSoluciones();
 
-function getObjetivo()
+$modelo = null;
+$desicion = true;
+
+//Ejecutar un modelo ya sea metodo normal o dos fases
+foreach ( $desigualdades as $key => $desigualdad ) 
 {
-	return $_GET['objetivo'];
+	$desicion = $desigualdad != "menor" ? false : true;
 }
 
-function getZ()
+if ( $desicion ) 
 {
-	$temp = [];
-
-	for ( $i = 0; $i < $_GET['v']; $i ++ ) 
-	{ 
-		$temp[] = $_GET['x' . $i];
-	}
-
-	return $temp;
+	$modelo = new Normal( $objetivo, $z, $reestricciones, $desigualdades, $soluciones );
+} else {
+	$modelo = new DosFases( $objetivo, $z, $reestricciones, $desigualdades, $soluciones );
 }
 
-function generateRestricciones()
-{
-	$temp = [];
-
-	//Anadimos los arreglos deacuerdo a cuantas restricciones existen
-	for ( $i = 0; $i < $_GET['r']; $i ++ ) 
-	{ 
-		$temp[] = [];
-	}
-
-	//LLenamos las restricciones
-	for ( $i = 0; $i < $_GET['r']; $i ++ ) 
-	{ 
-		for ( $j = 0; $j < $_GET['v']; $j ++ ) 
-		{ 
-			$temp[$i][] = (int)$_GET['r' . $i . '_' . $j];
-		}
-
-		//Agregamos el valor final a la restriccion
-		$temp[$i][] = (int)$_GET['s' . $i];
-	}
-	return $temp;
-}
-
-function getDesigualdades()
-{
-	$temp = [];
-
-	for ( $i = 0; $i < $_GET['r']; $i ++ ) 
-	{ 
-		$temp[] = $_GET['d' . $i];
-	}
-
-	return $temp;
-}
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +41,7 @@ function getDesigualdades()
 			<div class="col">
 				<?php require'header.php' ?>
 
-				<?php $simplex->execute() ?>
+				<?php $modelo->ejecutar() ?>
 			</div>
 		</div>
 	</div>
