@@ -55,8 +55,18 @@ class Normal extends Simplex
 			echo '<tbody>';
 				echo '<tr>';
 					echo '<th scope="row">z</th>';
-				// Imprimir los valores de z
-					
+
+					// Imprimir los valores de z
+					foreach ( $this->z as $key => $value ) 
+					{
+						echo '<th scope="row">' . $value . '</th>';	
+					}
+
+					for ( $i = 0; $i < count( $this->variablesHolgura ) + 1; $i ++ ) 
+					{ 
+						echo '<th scope="row">0</th>';	
+					}
+
 				echo '</tr>';
 
 				// Imprimir las variables no basicas verticales
